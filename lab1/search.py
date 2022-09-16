@@ -89,29 +89,22 @@ def depthFirstSearch(problem: SearchProblem):
     """
     "*** YOUR CODE HERE ***"
 
-
     state = problem.getStartState()
 
-    visited = []
-    visited.append(state)
+    visited = [state]
 	
     q = deque()
-    q.append((state, []))   #stores state and *path to that state*
+    q.append((state, []))
     
     while q:
         (state, actions) = q.popleft()
-
-        for succ in problem.getSuccessors(state):
-            succ_state = succ[0]                        # successor state
-            succ_action = succ[1]                       # action to get to successor state
-
+        for succ_state, succ_action, succ_cost in problem.getSuccessors(state):
             if succ_state not in visited:
                 if problem.isGoalState(succ_state):
-                    return actions + [succ_action]      # path to that state
+                    return actions + [succ_action]
                 else:
                     q.append((succ_state, actions + [succ_action]))
                     visited.append(succ_state)
-
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
