@@ -145,7 +145,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
                 cost = problem.getCostOfActions(new_path) + heuristic(succ_state, problem)
                 if succ_state not in visited:
                     q.append((succ_state, cost, new_path))
-                    q.sort(key=lambda x: x[1], reverse=True)
+                    q.sort(key=lambda x: x[1], reverse=True)    # comment this line out to make astar greedy
 
 
 # Abbreviations
