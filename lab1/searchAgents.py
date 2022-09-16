@@ -34,6 +34,7 @@ description for details.
 Good luck and happy searching!
 """
 
+from cmath import inf
 from typing import List, Tuple, Any
 from game import Directions
 from game import Agent
@@ -299,14 +300,16 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        return self.startingPosition, []
 
     def isGoalState(self, state: Any):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        
+        return len(state[1]) == 4
 
     def getSuccessors(self, state: Any):
         """
@@ -329,6 +332,14 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x, y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            next = int(x + dx), int(y + dy)
+            if not self.walls[next[0]][next[1]]:
+                visited_corners = state[1]
+                if next in self.corners and next not in visited_corners:
+                    visited_corners = visited_corners + [next]
+                successors.append(((next, visited_corners), action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -543,4 +554,6 @@ def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pa
     assert not walls[x1][y1], 'point1 is a wall: ' + str(point1)
     assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
-    return len(search.bfs(prob))
+
+    ### IMPORTANT: I changed bfs to dfs (lee algorithm), as i have not implemented bfs
+    return len(search.dfs(prob))
