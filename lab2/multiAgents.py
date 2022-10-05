@@ -189,7 +189,61 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         Returns the minimax action using self.depth and self.evaluationFunction
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        self.ghosts = gameState.getNumAgents() - 1
+        a = -float('Inf')
+        b = float('Inf')
+        move = self.maxValue(gameState, a, b, 0, self.index, 1)
+        return move
+
+
+    def maxValue(self, state, a, b, depth, agent=0, start=0):
+        if state.isWin() or state.isLose() or depth == self.depth:
+            return self.evaluationFunction(state)
+
+        best = None
+        new_n = -float('Inf')
+        actions = state.getLegalActions(agent)
+
+        for action in actions:
+            result = state.generateSuccessor(agent, action)
+            old_n = new_n
+            new_n = max(new_n, self.minValue(result, a, b, depth, agent+1))
+
+            if (new_n > old_n):
+                best = action
+
+            if new_n > b:
+                return new_n
+
+            a = max(new_n, a)
+
+        if start == 0:
+            return new_n
+        else:
+            return best
+
+
+    def minValue(self, state, a, b, depth, agent):
+        if state.isWin() or state.isLose() or depth == self.depth:
+            return self.evaluationFunction(state)
+
+        new_n = float('Inf')
+        actions = state.getLegalActions(agent)
+
+        for action in actions:
+            result = state.generateSuccessor(agent, action)
+
+            if (agent < self.ghosts):
+                new_n = min(new_n, self.minValue(result, a, b, depth, agent+1))
+            else:
+                new_n = min(new_n, self.maxValue(result, a, b, depth+1))
+
+            if new_n < a:
+                return new_n
+
+            b = min(new_n, b)
+            
+        return new_n
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
