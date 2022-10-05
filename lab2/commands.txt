@@ -4,3 +4,5 @@ python pacman.py -p ReflexAgent -g DirectionalGhost -k 2
 python autograder.py -q q2
 
 python autograder.py -q q3
+
+python autograder.py -q q4
